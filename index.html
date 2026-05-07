@@ -1,1 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ORN — Travel, Finally in Tune.</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #000000;
+    --white: #ffffff;
+    --navy: #1a2a4e;
+    --sky: #00a6d6;
+    --teal: #00c4b4;
+    --green: #4caf50;
+    --yellow: #f5c400;
+    --red: #d43a1a;
+    --mid-blue: #1a6fbf;
+    --grey-100: #111111;
+    --grey-150: #181818;
+    --grey-200: #222222;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--black); color: var(--white); overflow-x: hidden; }
 
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 1.1rem 4rem;
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(0,0,0,0.8); backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    transition: background 0.3s;
+  }
+  .nav-logo img { height: 38px; width: auto; }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a { color: rgba(255,255,255,0.65); text-decoration: none; font-size: 0.82rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--white); }
+  .nav-cta { background: var(--sky) !important; color: var(--black) !important; padding: 0.55rem 1.3rem; font-weight: 700 !important; }
+  .nav-cta:hover { background: #00c0f0 !important; }
+
+  /* HERO */
+  .hero {
+    height: 100vh; min-height: 700px; position: relative;
+    display: flex; align-items: flex-end; overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.55) 55%, rgba(0,0,0,0.96) 100%),
+      url('https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1800&auto=format&fit=crop&q=80') center/cover no-repeat;
+  }
+  .hero-content { position: relative; z-index: 2; padding: 0 4rem 7rem; max-width: 900px; }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--sky); margin-bottom: 1.5rem;
+  }
+  .hero-tag::before { content: ''; display: block; width: 22px; height: 2px; background: var(--sky); }
+  .hero h1 {
+    font-size: clamp(3.2rem, 6vw, 6.5rem); font-weight: 800;
+    line-height: 1.0; letter-spacing: -0.025em; margin-bottom: 1.2rem;
+  }
+  .hero h1 em { font-style: normal; color: var(--sky); }
+  .hero .sub {
+    font-size: 1.25rem; font-weight: 300; font-style: italic;
+    color: rgba(255,255,255,0.6); margin-bottom: 1rem; letter-spacing: 0.01em;
+  }
+  .hero p {
+    font-size: 1.05rem; font-weight: 300; color: rgba(255,255,255,0.7);
+    max-width: 560px; line-height: 1.75; margin-bottom: 2.5rem;
+  }
+  .hero-actions { display: flex; gap: 1rem; align-items: center; }
+  .btn-primary {
+    background: var(--white); color: var(--black);
+    padding: 0.95rem 2.2rem; font-family: inherit; font-size: 0.87rem;
+    font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase;
+    border: none; cursor: pointer; transition: all 0.25s; text-decoration: none; display: inline-block;
+  }
+  .btn-primary:hover { background: var(--sky); color: var(--black); transform: translateY(-2px); }
+  .btn-ghost {
+    border: 1px solid rgba(255,255,255,0.3); color: var(--white);
+    padding: 0.95rem 2.2rem; font-family: inherit; font-size: 0.87rem;
+    font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase;
+    background: transparent; cursor: pointer; transition: all 0.25s; text-decoration: none; display: inline-block;
+  }
+  .btn-ghost:hover { border-color: var(--white); background: rgba(255,255,255,0.07); }
+
+  /* TICKER */
+  .ticker-wrap { background: var(--sky); padding: 0.7rem 0; overflow: hidden; white-space: nowrap; }
+  .ticker { display: inline-block; animation: ticker 35s linear infinite; }
+  .ticker span {
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--black); margin: 0 2.5rem;
+  }
+  .ticker span::before { content: '✦'; margin-right: 2.5rem; }
+  @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* SECTIONS */
+  section { padding: 7rem 4rem; }
+  .label {
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--sky); margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 0.6rem;
+  }
+  .label::before { content: ''; width: 18px; height: 2px; background: var(--sky); flex-shrink: 0; }
+  h2.section-title {
+    font-size: clamp(2.2rem, 4vw, 3.8rem); font-weight: 800;
+    line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 1.2rem;
+  }
+  .section-lead {
+    font-size: 1.0rem; font-weight: 300; color: rgba(255,255,255,0.6);
+    max-width: 580px; line-height: 1.8;
+  }
+
+  /* APPLE MOMENT */
+  .apple-moment {
+    background: var(--grey-100);
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+    min-height: 520px;
+  }
+  .apple-left {
+    padding: 6rem 5rem;
+    display: flex; flex-direction: column; justify-content: center;
+    border-right: 1px solid rgba(255,255,255,0.05);
+  }
+  .apple-divider {
+    width: 60px; height: 1px; background: rgba(255,255,255,0.2); margin: 2rem 0;
+  }
+  .apple-left .q1 {
+    font-size: clamp(1.5rem, 2.5vw, 2.2rem); font-weight: 300;
+    line-height: 1.4; color: rgba(255,255,255,0.75);
+  }
+  .apple-left .q2 {
+    font-size: clamp(1.5rem, 2.5vw, 2.2rem); font-weight: 700;
+    line-height: 1.35; color: var(--white);
+  }
+  .apple-right {
+    padding: 6rem 5rem;
+    display: flex; flex-direction: column; justify-content: center;
+    background: #0d0d0d;
+  }
+  .apple-right .big-claim {
+    font-size: clamp(1.1rem, 1.8vw, 1.5rem); font-weight: 700;
+    color: var(--sky); line-height: 1.4; margin-bottom: 1.5rem;
+  }
+  .apple-right p {
+    font-size: 0.95rem; font-weight: 300; color: rgba(255,255,255,0.55); line-height: 1.8;
+  }
+
+  /* NX/OS STRIP */
+  .nxos-strip {
+    background: linear-gradient(135deg, #050e1a 0%, #091828 100%);
+    padding: 5rem 4rem;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
+    border-top: 1px solid rgba(0,166,214,0.15);
+    border-bottom: 1px solid rgba(0,166,214,0.15);
+  }
+  .nxos-left .os-compare {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1px; margin-top: 2.5rem; background: rgba(255,255,255,0.06);
+  }
+  .os-col { background: #0a1628; padding: 2rem; }
+  .os-col .os-label {
+    font-size: 0.65rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
+    color: rgba(255,255,255,0.35); margin-bottom: 1rem;
+  }
+  .os-col h4 { font-size: 1.1rem; font-weight: 800; margin-bottom: 1rem; }
+  .os-col ul { list-style: none; }
+  .os-col ul li {
+    font-size: 0.82rem; color: rgba(255,255,255,0.5); padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05); line-height: 1.4;
+  }
+  .os-col ul li:last-child { border-bottom: none; }
+  .os-col.nxos h4 { color: var(--sky); }
+  .nxos-right .tagline-big {
+    font-size: clamp(1.8rem, 3vw, 2.8rem); font-weight: 800; line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+  .nxos-right .tagline-big em { font-style: normal; color: var(--teal); }
+  .nxos-right p { font-size: 0.95rem; font-weight: 300; color: rgba(255,255,255,0.55); line-height: 1.8; margin-top: 1.5rem; }
+
+  /* ABOUT */
+  .about {
+    background: var(--grey-150);
+    display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center;
+  }
+  .about-visual { position: relative; height: 520px; }
+  .about-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .about-stat-block {
+    position: absolute; bottom: -2rem; left: -2rem;
+    background: var(--sky); color: var(--black); padding: 2rem 2.5rem;
+  }
+  .about-stat-block .stat-num { font-size: 3rem; font-weight: 800; line-height: 1; display: block; }
+  .about-stat-block .stat-lbl { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 0.25rem; }
+  .pillars { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-top: 2rem; }
+  .pillar { padding: 1.5rem; border: 1px solid rgba(255,255,255,0.07); position: relative; overflow: hidden; transition: border-color 0.3s; }
+  .pillar:hover { border-color: var(--sky); }
+  .pillar-accent { width: 4px; height: 100%; position: absolute; left: 0; top: 0; }
+  .pillar h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.4rem; padding-left: 0.75rem; }
+  .pillar p { font-size: 0.82rem; color: rgba(255,255,255,0.5); line-height: 1.6; padding-left: 0.75rem; }
+
+  /* NUMBERS */
+  .numbers { background: var(--black); display: grid; grid-template-columns: repeat(4, 1fr); padding: 0; }
+  .num-cell {
+    padding: 4rem 3rem; border-right: 1px solid rgba(255,255,255,0.05);
+    position: relative; overflow: hidden;
+  }
+  .num-cell:last-child { border-right: none; }
+  .num-cell::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+  .num-cell:nth-child(1)::before { background: var(--navy); }
+  .num-cell:nth-child(2)::before { background: var(--sky); }
+  .num-cell:nth-child(3)::before { background: var(--green); }
+  .num-cell:nth-child(4)::before { background: var(--red); }
+  .num-cell .big { font-size: 3.8rem; font-weight: 800; line-height: 1; letter-spacing: -0.03em; display: block; }
+  .num-cell .unit { font-size: 2rem; font-weight: 300; color: var(--sky); }
+  .num-cell p { font-size: 0.8rem; color: rgba(255,255,255,0.45); margin-top: 0.4rem; }
+
+  /* FINANCIAL BACKING */
+  .financial {
+    background: var(--grey-100);
+  }
+  .fin-grid {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px;
+    margin-top: 3.5rem; background: rgba(255,255,255,0.05);
+  }
+  .fin-col { background: var(--grey-100); padding: 2.5rem; }
+  .fin-col.highlight { background: #0a1628; border-top: 3px solid var(--sky); }
+  .fin-col h3 {
+    font-size: 0.65rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(255,255,255,0.35); margin-bottom: 1.5rem;
+  }
+  .fin-big {
+    font-size: 3.2rem; font-weight: 800; line-height: 1; letter-spacing: -0.03em;
+    color: var(--white); display: block; margin-bottom: 0.5rem;
+  }
+  .fin-big-label {
+    font-size: 0.78rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--sky); margin-bottom: 1.5rem; display: block;
+  }
+  .fin-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+    background: rgba(255,255,255,0.05); margin-top: 1rem;
+  }
+  .fin-mini { background: #0d0d0d; padding: 1.2rem; }
+  .fin-mini .val { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; display: block; }
+  .fin-mini .val.green { color: #4ade80; }
+  .fin-mini .val.sky { color: var(--sky); }
+  .fin-mini .lbl { font-size: 0.7rem; color: rgba(255,255,255,0.4); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 0.2rem; }
+  .fin-badges { display: flex; flex-direction: column; gap: 1rem; margin-top: 1.5rem; }
+  .fin-badge {
+    display: flex; align-items: flex-start; gap: 0.75rem;
+    padding: 1rem; background: #0d0d0d; border-left: 3px solid rgba(255,255,255,0.1);
+  }
+  .fin-badge-icon { font-size: 1rem; flex-shrink: 0; margin-top: 0.1rem; }
+  .fin-badge-text h5 { font-size: 0.82rem; font-weight: 700; margin-bottom: 0.2rem; }
+  .fin-badge-text p { font-size: 0.75rem; color: rgba(255,255,255,0.45); line-height: 1.5; }
+  .founder-grid {
+    display: grid; grid-template-columns: 1fr; gap: 1px;
+    background: rgba(255,255,255,0.05);
+  }
+  .founder-item { background: #0d0d0d; padding: 1.2rem 1.5rem; }
+  .founder-item h5 { font-size: 0.9rem; font-weight: 700; margin-bottom: 0.2rem; }
+  .founder-item .role { font-size: 0.72rem; color: var(--sky); font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.3rem; }
+  .founder-item p { font-size: 0.75rem; color: rgba(255,255,255,0.45); line-height: 1.4; }
+  .leader-chip {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    font-size: 0.65rem; font-weight: 600; letter-spacing: 0.05em;
+    padding: 0.25rem 0.6rem; border-radius: 2px; margin-top: 0.4rem;
+  }
+
+  /* BRANDS */
+  .brands { background: var(--black); text-align: center; }
+  .brands .section-title, .brands .section-lead { margin-left: auto; margin-right: auto; text-align: center; }
+  .brands .label { justify-content: center; }
+  .brands .label::before { display: none; }
+  .brand-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5px;
+    margin-top: 4rem; background: rgba(255,255,255,0.05);
+  }
+  .brand-card {
+    background: var(--grey-100); padding: 2.5rem 2.5rem 2rem;
+    text-align: left; position: relative; overflow: hidden; transition: background 0.3s; cursor: default;
+  }
+  .brand-card:hover { background: #1e1e1e; }
+  .brand-card::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+    transform: scaleX(0); transform-origin: left; transition: transform 0.35s ease;
+  }
+  .brand-card:hover::after { transform: scaleX(1); }
+  .brand-card.c1::after { background: var(--navy); }
+  .brand-card.c2::after { background: var(--mid-blue); }
+  .brand-card.c3::after { background: var(--sky); }
+  .brand-card.c4::after { background: var(--green); }
+  .brand-card.c5::after { background: var(--yellow); }
+  .brand-card.c6::after { background: var(--red); }
+  .brand-dot { width: 10px; height: 10px; border-radius: 50%; margin-bottom: 1.5rem; }
+  .brand-card h3 { font-size: 1.25rem; font-weight: 800; margin-bottom: 0.6rem; letter-spacing: -0.01em; }
+  .brand-card p { font-size: 0.83rem; color: rgba(255,255,255,0.5); line-height: 1.65; margin-bottom: 1.5rem; }
+  .brand-type { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.25); }
+
+  /* DESTINATIONS */
+  .destinations { background: var(--grey-150); padding-bottom: 5rem; }
+  .dest-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem; }
+  .dest-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+  .dest-card:nth-child(1) { grid-column: span 2; grid-row: span 2; }
+  .dest-card { position: relative; overflow: hidden; cursor: pointer; }
+  .dest-card img {
+    width: 100%; height: 100%; min-height: 220px; object-fit: cover; display: block;
+    transition: transform 0.6s ease; filter: brightness(0.65);
+  }
+  .dest-card:hover img { transform: scale(1.05); filter: brightness(0.5); }
+  .dest-info {
+    position: absolute; bottom: 0; left: 0; right: 0; padding: 1.5rem;
+    background: linear-gradient(transparent, rgba(0,0,0,0.8));
+  }
+  .dest-info h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.2rem; }
+  .dest-card:nth-child(1) .dest-info h3 { font-size: 1.8rem; }
+  .dest-info p { font-size: 0.75rem; color: rgba(255,255,255,0.6); }
+
+  /* SERVICES */
+  .services { background: var(--grey-100); }
+  .services-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+    margin-top: 3.5rem; background: rgba(255,255,255,0.05);
+  }
+  .service-item { background: var(--grey-100); padding: 2.5rem; transition: background 0.25s; }
+  .service-item:hover { background: #1e1e1e; }
+  .service-num { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.2em; color: rgba(255,255,255,0.2); margin-bottom: 1.2rem; }
+  .service-icon { font-size: 1.6rem; margin-bottom: 1rem; display: block; }
+  .service-item h3 { font-size: 1.0rem; font-weight: 700; margin-bottom: 0.6rem; }
+  .service-item p { font-size: 0.82rem; color: rgba(255,255,255,0.5); line-height: 1.65; }
+
+  /* GLOBAL REACH */
+  .global-reach {
+    background: var(--black);
+    text-align: center; padding: 6rem 4rem;
+  }
+  .global-reach .label { justify-content: center; }
+  .global-reach .label::before { display: none; }
+  .reach-tagline {
+    font-size: clamp(1.8rem, 3.5vw, 3.2rem); font-weight: 800;
+    letter-spacing: -0.02em; line-height: 1.1; max-width: 780px; margin: 0 auto 1.5rem;
+  }
+  .reach-tagline em { font-style: italic; font-weight: 300; color: rgba(255,255,255,0.5); }
+  .reach-sub {
+    font-size: 1rem; font-weight: 300; color: rgba(255,255,255,0.5);
+    max-width: 600px; margin: 0 auto 3.5rem; line-height: 1.75;
+  }
+  .reach-regions {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px;
+    max-width: 900px; margin: 0 auto; background: rgba(255,255,255,0.05);
+  }
+  .region-cell {
+    background: var(--grey-100); padding: 1.5rem 1rem; transition: background 0.2s;
+  }
+  .region-cell:hover { background: #1e1e1e; }
+  .region-cell .r-num { font-size: 1.6rem; font-weight: 800; color: var(--sky); display: block; line-height: 1; }
+  .region-cell .r-label { font-size: 0.7rem; color: rgba(255,255,255,0.4); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 0.3rem; }
+
+  /* CTA BAND */
+  .cta-band {
+    background:
+      linear-gradient(135deg, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.65) 100%),
+      url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1800&auto=format&fit=crop&q=80') center/cover no-repeat;
+    text-align: center; padding: 8rem 4rem;
+  }
+  .cta-wave {
+    font-size: 0.9rem; font-weight: 300; font-style: italic;
+    color: rgba(255,255,255,0.4); letter-spacing: 0.05em; margin-bottom: 1.5rem;
+  }
+  .cta-band h2 {
+    font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 800;
+    letter-spacing: -0.02em; line-height: 1.05; max-width: 800px; margin: 0 auto 1.5rem;
+  }
+  .cta-band p {
+    font-size: 1.0rem; color: rgba(255,255,255,0.55); max-width: 520px;
+    margin: 0 auto 2.5rem; line-height: 1.75; font-weight: 300;
+  }
+
+  /* PARTNERS */
+  .partners { background: var(--grey-100); text-align: center; padding: 4rem 4rem; }
+  .partners .label { justify-content: center; }
+  .partners .label::before { display: none; }
+  .partners-logos { display: flex; align-items: center; justify-content: center; gap: 3.5rem; flex-wrap: wrap; margin-top: 2.5rem; opacity: 0.35; }
+  .partner-name { font-size: 1.05rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
+
+  /* FOOTER */
+  footer {
+    background: #030303; padding: 5rem 4rem 2.5rem;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 4rem; margin-bottom: 4rem; }
+  .footer-brand img { height: 48px; margin-bottom: 1.2rem; }
+  .footer-brand p { font-size: 0.83rem; color: rgba(255,255,255,0.4); line-height: 1.75; max-width: 280px; margin-bottom: 1.5rem; }
+  .footer-brand .tagline { font-style: italic; font-size: 0.85rem; color: rgba(255,255,255,0.3); margin-top: 0.5rem; }
+  .social-row { display: flex; gap: 0.6rem; }
+  .social-btn {
+    width: 34px; height: 34px; border: 1px solid rgba(255,255,255,0.12);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem; cursor: pointer; transition: all 0.2s;
+    text-decoration: none; color: var(--white);
+  }
+  .social-btn:hover { border-color: var(--sky); background: rgba(0,166,214,0.12); }
+  .footer-col h5 { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 1.2rem; }
+  .footer-col ul { list-style: none; }
+  .footer-col ul li { margin-bottom: 0.6rem; }
+  .footer-col ul a { color: rgba(255,255,255,0.5); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
+  .footer-col ul a:hover { color: var(--white); }
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.05); padding-top: 2rem;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+  }
+  .footer-bottom p { font-size: 0.75rem; color: rgba(255,255,255,0.25); }
+  .footer-legal { display: flex; gap: 2rem; }
+  .footer-legal a { color: rgba(255,255,255,0.25); text-decoration: none; font-size: 0.75rem; transition: color 0.2s; }
+  .footer-legal a:hover { color: var(--white); }
+
+  /* ANIMATIONS */
+  .anim { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .anim.visible { opacity: 1; transform: translateY(0); }
+  .hero-content .anim { opacity: 0; animation: fadeUp 0.9s ease forwards; }
+  .hero-content .anim:nth-child(1) { animation-delay: 0.15s; }
+  .hero-content .anim:nth-child(2) { animation-delay: 0.35s; }
+  .hero-content .anim:nth-child(3) { animation-delay: 0.5s; }
+  .hero-content .anim:nth-child(4) { animation-delay: 0.65s; }
+  .hero-content .anim:nth-child(5) { animation-delay: 0.8s; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* RESPONSIVE */
+  @media (max-width: 1024px) {
+    nav { padding: 1rem 2rem; }
+    section { padding: 5rem 2rem; }
+    .apple-moment { grid-template-columns: 1fr; }
+    .nxos-strip { grid-template-columns: 1fr; gap: 3rem; padding: 4rem 2rem; }
+    .about { grid-template-columns: 1fr; }
+    .about-visual { height: 340px; }
+    .numbers { grid-template-columns: repeat(2, 1fr); }
+    .fin-grid { grid-template-columns: 1fr; }
+    .brand-grid { grid-template-columns: repeat(2, 1fr); }
+    .dest-grid { grid-template-columns: repeat(2, 1fr); }
+    .dest-card:nth-child(1) { grid-column: span 2; }
+    .services-grid { grid-template-columns: 1fr 1fr; }
+    .reach-regions { grid-template-columns: repeat(3, 1fr); }
+    .footer-top { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 640px) {
+    nav { padding: 1rem 1.2rem; }
+    .nav-links { display: none; }
+    .hero-content { padding: 0 1.5rem 5rem; }
+    section { padding: 4rem 1.5rem; }
+    .brand-grid, .numbers, .services-grid, .reach-regions { grid-template-columns: 1fr; }
+    .dest-grid { grid-template-columns: 1fr; }
+    .dest-card:nth-child(1) { grid-column: span 1; }
+    .footer-top { grid-template-columns: 1fr; gap: 2.5rem; }
+    .os-compare { grid-template-columns: 1fr; }
+    .fin-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#"><img src="orn-logo.png" alt="ORN"></a>
+  <ul class="nav-links">
+    <li><a href="#apple">Our Vision</a></li>
+    <li><a href="#brands">Our Brands</a></li>
+    <li><a href="#destinations">Destinations</a></li>
+    <li><a href="#financial">Investors</a></li>
+    <li><a href="#contact" class="nav-cta">Partner With Us</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-tag anim">Orchestrated Rhythms of Nature</div>
+    <h1 class="anim">Travel,<br><em>Finally in Tune.</em></h1>
+    <p class="sub anim">Your way to discover, live, and experience the world — precisely, effortlessly, beautifully.</p>
+    <p class="anim">ORN is building the operating system for intelligent travel — connecting every feeling worldwide to every human, at scale.</p>
+    <div class="hero-actions anim">
+      <a href="#apple" class="btn-primary">Discover ORN</a>
+      <a href="#financial" class="btn-ghost">Investor Relations</a>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span>Flights</span><span>Hotels &amp; Resorts</span><span>Cruise</span><span>Rail</span>
+    <span>Car Hire</span><span>Experiences</span><span>Corporate Travel</span><span>NX/OS Platform</span>
+    <span>104 Nationalities</span><span>Profitable Since Day 1</span><span>HCL Group Backed</span>
+    <span>Flights</span><span>Hotels &amp; Resorts</span><span>Cruise</span><span>Rail</span>
+    <span>Car Hire</span><span>Experiences</span><span>Corporate Travel</span><span>NX/OS Platform</span>
+    <span>104 Nationalities</span><span>Profitable Since Day 1</span><span>HCL Group Backed</span>
+  </div>
+</div>
+
+<!-- APPLE MOMENT -->
+<div class="apple-moment" id="apple">
+  <div class="apple-left">
+    <p class="label anim">The ORN Vision</p>
+    <p class="q1 anim">The world didn't change when music became digital.</p>
+    <div class="apple-divider anim"></div>
+    <p class="q2 anim">It changed when Apple wrapped it around the user.</p>
+  </div>
+  <div class="apple-right">
+    <p class="big-claim anim">What ORN is doing to travel is what Apple did to music.</p>
+    <p class="anim">Apple didn't invent music — they reinvented how it felt to experience it. ORN isn't reinventing travel. We're reinventing how it feels to live it. From the first search to the last memory, every moment orchestrated around you.</p>
+  </div>
+</div>
+
+<!-- NX/OS -->
+<div class="nxos-strip">
+  <div class="nxos-left">
+    <p class="label anim">The Platform</p>
+    <h2 class="section-title anim" style="font-size:clamp(1.8rem,3vw,2.8rem);">NX/OS — The Operating System<br>for the Travel Age</h2>
+    <div class="os-compare anim">
+      <div class="os-col">
+        <div class="os-label">Then</div>
+        <h4>iOS</h4>
+        <ul>
+          <li>Platform for mobile life</li>
+          <li>Apps, Maps, Messages</li>
+          <li>App Store ecosystem</li>
+        </ul>
+      </div>
+      <div class="os-col nxos">
+        <div class="os-label">Now</div>
+        <h4>NX/OS by ORN</h4>
+        <ul>
+          <li>Platform for intelligent travel</li>
+          <li>Concierge, Routing, Experiences</li>
+          <li>Experience Marketplace</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="nxos-right">
+    <p class="tagline-big anim">Rewiring the world <em>the way<br>it should be.</em></p>
+    <p class="anim">NX/OS is the first operating system built entirely around the traveller's state of mind — intelligently adapting every element of a journey to the person experiencing it. Slow morning in Florence? Rain expected at 3PM? NX/OS already knows.</p>
+    <div style="margin-top:2rem" class="anim">
+      <a href="#brands" class="btn-primary" style="font-size:0.8rem;padding:0.8rem 1.8rem;">Explore Our Platform</a>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT / PILLARS -->
+<section class="about" id="about">
+  <div class="about-visual">
+    <img class="about-img" src="https://images.unsplash.com/photo-1530521954074-e64f6810b32d?w=900&auto=format&fit=crop&q=80" alt="ORN Global">
+    <div class="about-stat-block">
+      <span class="stat-num">104</span>
+      <span class="stat-lbl">Nationalities Served</span>
+    </div>
+  </div>
+  <div class="about-text">
+    <p class="label anim">The Global Construct</p>
+    <h2 class="section-title anim">One Corporation.<br>Infinite Journeys.</h2>
+    <p class="section-lead anim" style="margin-bottom:2.5rem">ORN is built on five structural pillars that no competitor can replicate as a whole — a trusted brand, global distribution, differentiated technology, solid financial foundations, and the people and infrastructure to deliver at scale.</p>
+    <div class="pillars anim">
+      <div class="pillar">
+        <div class="pillar-accent" style="background:var(--teal)"></div>
+        <h4>Trusted Brand</h4>
+        <p>A respectable global name built on consistent delivery across every market.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-accent" style="background:var(--sky)"></div>
+        <h4>Global Distribution</h4>
+        <p>Americas · Europe · Middle East · Asia · Australia &amp; New Zealand.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-accent" style="background:var(--green)"></div>
+        <h4>NX/OS Technology</h4>
+        <p>Differentiated, proprietary platform powering personalised travel at scale.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-accent" style="background:var(--red)"></div>
+        <h4>Financial Strength</h4>
+        <p>$60B HCL Group backing. Zero debt. Profitable from day one.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NUMBERS -->
+<div class="numbers">
+  <div class="num-cell anim">
+    <span class="big">3,200<span class="unit">M</span></span>
+    <p>Target travellers in addressable market</p>
+  </div>
+  <div class="num-cell anim">
+    <span class="big">104<span class="unit">+</span></span>
+    <p>Nationalities already travelling with ORN</p>
+  </div>
+  <div class="num-cell anim">
+    <span class="big">$60<span class="unit">B</span></span>
+    <p>HCL Group financial backing</p>
+  </div>
+  <div class="num-cell anim">
+    <span class="big">Day<span class="unit" style="font-size:1.5rem;"> 1</span></span>
+    <p>Profitable since inception</p>
+  </div>
+</div>
+
+<!-- FINANCIAL BACKING -->
+<section class="financial" id="financial">
+  <p class="label anim">Financial Strength &amp; Leadership</p>
+  <h2 class="section-title anim">Backed to Win.<br>Built to Last.</h2>
+  <p class="section-lead anim">ORN is backed by one of India's largest conglomerates, led by proven founders with a track record of scaling travel technology globally, and governed with enterprise-grade financial discipline.</p>
+
+  <div class="fin-grid">
+    <!-- Financial Strength -->
+    <div class="fin-col highlight">
+      <h3>Financial Strength</h3>
+      <span class="fin-big">$60B</span>
+      <span class="fin-big-label">HCL Group Backing</span>
+      <div class="fin-row">
+        <div class="fin-mini">
+          <span class="val green">Zero</span>
+          <div class="lbl">Debt</div>
+        </div>
+        <div class="fin-mini">
+          <span class="val sky">Day 1</span>
+          <div class="lbl">Profitable</div>
+        </div>
+        <div class="fin-mini">
+          <span class="val">$1.5B</span>
+          <div class="lbl">Via.com GMV</div>
+        </div>
+        <div class="fin-mini">
+          <span class="val">150+</span>
+          <div class="lbl">Innovation Labs</div>
+        </div>
+      </div>
+      <div class="fin-badges" style="margin-top:1.5rem">
+        <div class="fin-badge">
+          <div class="fin-badge-icon">🔒</div>
+          <div class="fin-badge-text">
+            <h5>Enterprise-Grade Security</h5>
+            <p>Bank-level encryption, SOC 2 compliance, ISO 27001 certified</p>
+          </div>
+        </div>
+        <div class="fin-badge">
+          <div class="fin-badge-icon">🏦</div>
+          <div class="fin-badge-text">
+            <h5>Financial Stability</h5>
+            <p>Backed by India's largest conglomerate. Zero debt, profitable operations since inception.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Proven Founders -->
+    <div class="fin-col">
+      <h3>Proven Founders</h3>
+      <div class="founder-grid">
+        <div class="founder-item">
+          <div class="role">Founder &amp; Group CEO</div>
+          <h5>Vinay Gupta</h5>
+          <p>Via.com: $1.5B GMV, 49 countries, 10M+ customers</p>
+        </div>
+        <div class="founder-item">
+          <div class="role">Co-Founder &amp; Group COO</div>
+          <h5>Amit Aggarwal</h5>
+          <p>Via.com CTO, IIT Gold Medal, Scaled tech 20→100+ engineers</p>
+        </div>
+        <div class="founder-item">
+          <div class="role">Co-Founder &amp; Group CTO</div>
+          <h5>Varun Gupta</h5>
+          <p>Built scalable architecture deployed across 49 countries</p>
+        </div>
+        <div class="founder-item">
+          <div class="role">Co-Founders</div>
+          <h5>Ankit Agarwal &amp; Ankush Agarwal</h5>
+          <p>Operations &amp; Commercial Excellence</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- World-Class Leadership -->
+    <div class="fin-col">
+      <h3>World-Class Leadership</h3>
+      <div class="founder-grid">
+        <div class="founder-item">
+          <h5>Andrew McEvoy</h5>
+          <p>Former MD, Tourism Australia</p>
+          <span class="leader-chip" style="background:rgba(0,166,214,0.15);color:var(--sky)">🌏 Asia-Pacific Strategy</span>
+        </div>
+        <div class="founder-item">
+          <h5>Ninan Chacko</h5>
+          <p>Former CEO, Travel Leaders Group (USA)</p>
+          <span class="leader-chip" style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.5)">🇺🇸 North America Expansion</span>
+        </div>
+        <div class="founder-item">
+          <h5>Bader Kanoo</h5>
+          <p>Regional Business Leader, Middle East</p>
+          <span class="leader-chip" style="background:rgba(245,196,0,0.12);color:var(--yellow)">🌍 GCC Operations</span>
+        </div>
+        <div class="founder-item">
+          <h5>Raj Kumar</h5>
+          <p>Chief Operating Officer. Entrepreneur, Travel and Technology Investor, Lastminute.com</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BRANDS -->
+<section class="brands" id="brands">
+  <p class="label anim">Our Portfolio</p>
+  <h2 class="section-title anim">A Brand for Every Journey</h2>
+  <p class="section-lead anim" style="margin:0 auto">From everyday travel to once-in-a-lifetime adventures, the ORN family of brands covers the full spectrum of the travel experience — all powered by the NX/OS platform.</p>
+  <div class="brand-grid">
+    <div class="brand-card c1 anim">
+      <div class="brand-dot" style="background:var(--navy)"></div>
+      <h3>ORN Flights</h3>
+      <p>Comprehensive flight search across thousands of routes, combining the world's major airlines with exclusive fares and flexible options.</p>
+      <span class="brand-type">Air Travel</span>
+    </div>
+    <div class="brand-card c2 anim">
+      <div class="brand-dot" style="background:var(--mid-blue)"></div>
+      <h3>ORN Hotels</h3>
+      <p>From boutique city stays to sprawling resort properties — connecting guests with over 1.2 million properties worldwide.</p>
+      <span class="brand-type">Accommodation</span>
+    </div>
+    <div class="brand-card c3 anim">
+      <div class="brand-dot" style="background:var(--sky)"></div>
+      <h3>ORN Cruise</h3>
+      <p>The world's premier cruise comparison and booking platform, curating voyages across every ocean and river system on the planet.</p>
+      <span class="brand-type">Cruise &amp; Maritime</span>
+    </div>
+    <div class="brand-card c4 anim">
+      <div class="brand-dot" style="background:var(--green)"></div>
+      <h3>ORN Rail</h3>
+      <p>Pioneering sustainable rail travel through our global booking network — high-speed routes, scenic journeys and intercity connections.</p>
+      <span class="brand-type">Rail &amp; Ground</span>
+    </div>
+    <div class="brand-card c5 anim">
+      <div class="brand-dot" style="background:var(--yellow)"></div>
+      <h3>ORN Cars</h3>
+      <p>Global car hire comparison and fleet management for leisure and corporate travellers, with EV and premium options throughout.</p>
+      <span class="brand-type">Car Hire &amp; Mobility</span>
+    </div>
+    <div class="brand-card c6 anim">
+      <div class="brand-dot" style="background:var(--red)"></div>
+      <h3>ORN Experiences</h3>
+      <p>Curated tours, activities and destination experiences — hand-selected for travellers seeking something extraordinary and deeply personal.</p>
+      <span class="brand-type">Experiences &amp; Tours</span>
+    </div>
+  </div>
+</section>
+
+<!-- DESTINATIONS -->
+<section class="destinations" id="destinations">
+  <div class="dest-header">
+    <div>
+      <p class="label anim">Where We Take You</p>
+      <h2 class="section-title anim">World-Class Destinations</h2>
+    </div>
+    <a href="#" class="btn-ghost anim" style="white-space:nowrap">View All Destinations</a>
+  </div>
+  <div class="dest-grid">
+    <div class="dest-card anim"><img src="https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=800&auto=format&fit=crop&q=80" alt="Japan"><div class="dest-info"><h3>Japan</h3><p>Asia · Culture &amp; Tradition</p></div></div>
+    <div class="dest-card anim"><img src="https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=600&auto=format&fit=crop&q=80" alt="Paris"><div class="dest-info"><h3>Paris</h3><p>Europe · Art &amp; Cuisine</p></div></div>
+    <div class="dest-card anim"><img src="https://images.unsplash.com/photo-1574016859700-5a870b7e1d03?w=600&auto=format&fit=crop&q=80" alt="Maldives"><div class="dest-info"><h3>Maldives</h3><p>Indian Ocean · Luxury &amp; Escape</p></div></div>
+    <div class="dest-card anim"><img src="https://images.unsplash.com/photo-1577717903315-1691ae25ab3f?w=600&auto=format&fit=crop&q=80" alt="New York"><div class="dest-info"><h3>New York</h3><p>Americas · City &amp; Culture</p></div></div>
+    <div class="dest-card anim"><img src="https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?w=600&auto=format&fit=crop&q=80" alt="Safari"><div class="dest-info"><h3>East Africa</h3><p>Africa · Safari &amp; Wildlife</p></div></div>
+  </div>
+</section>
+
+<!-- GLOBAL REACH -->
+<section class="global-reach">
+  <p class="label anim">ORN Worldwide</p>
+  <h2 class="reach-tagline anim">The missing layer of global infrastructure<br><em>for uniform delivery of experiences</em></h2>
+  <p class="reach-sub anim">Like FedEx moves packages globally, ORN moves travellers seamlessly. Customers from 104 nationalities have already travelled with us — across every major region on earth.</p>
+  <div class="reach-regions anim">
+    <div class="region-cell"><span class="r-num">600M</span><div class="r-label">North America</div></div>
+    <div class="region-cell"><span class="r-num">800M</span><div class="r-label">Europe</div></div>
+    <div class="region-cell"><span class="r-num">1.2B</span><div class="r-label">Asia-Pacific</div></div>
+    <div class="region-cell"><span class="r-num">300M</span><div class="r-label">Middle East &amp; Africa</div></div>
+    <div class="region-cell"><span class="r-num">300M</span><div class="r-label">Latin America</div></div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div style="max-width:600px">
+    <p class="label anim">What We Offer</p>
+    <h2 class="section-title anim">Corporate &amp; Enterprise Services</h2>
+    <p class="section-lead anim">Bespoke travel management solutions for global businesses, travel trade partners and institutional clients — all backed by the NX/OS platform.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-item anim"><div class="service-num">01</div><span class="service-icon">✈</span><h3>Corporate Travel Management</h3><p>End-to-end travel programme management including policy compliance, approval workflows, reporting and duty of care.</p></div>
+    <div class="service-item anim"><div class="service-num">02</div><span class="service-icon">🤝</span><h3>Trade Partner Programme</h3><p>Dedicated support, preferential rates and co-marketing opportunities for travel agents and tour operators globally.</p></div>
+    <div class="service-item anim"><div class="service-num">03</div><span class="service-icon">💡</span><h3>NX/OS API &amp; Technology</h3><p>White-label and API-first travel technology enabling partners to integrate ORN's intelligent content into their own platforms.</p></div>
+    <div class="service-item anim"><div class="service-num">04</div><span class="service-icon">🌐</span><h3>Group &amp; MICE Travel</h3><p>Specialised group booking for meetings, incentives, conferences and large-scale events worldwide.</p></div>
+    <div class="service-item anim"><div class="service-num">05</div><span class="service-icon">♾</span><h3>Loyalty &amp; Rewards</h3><p>Cross-brand loyalty ecosystem enabling travellers to earn and redeem across all ORN brands and partner networks.</p></div>
+    <div class="service-item anim"><div class="service-num">06</div><span class="service-icon">🛡</span><h3>Travel Risk &amp; Insurance</h3><p>Comprehensive travel protection, medical evacuation and risk intelligence for travellers and corporates.</p></div>
+  </div>
+</section>
+
+<!-- CTA BAND -->
+<section class="cta-band" id="contact">
+  <p class="cta-wave anim">Travel, finally in tune.</p>
+  <h2 class="anim">Ready to Partner<br>With ORN?</h2>
+  <p class="anim">Whether you're a travel trade partner, corporate client or technology company — ORN has a solution orchestrated for you.</p>
+  <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;" class="anim">
+    <a href="mailto:partners@orn.com" class="btn-primary">Get In Touch</a>
+    <a href="#brands" class="btn-ghost">Explore Brands</a>
+  </div>
+</section>
+
+<!-- PARTNERS -->
+<section class="partners">
+  <p class="label">Accreditations &amp; Partners</p>
+  <div class="partners-logos">
+    <span class="partner-name">IATA</span>
+    <span class="partner-name">HCL Group</span>
+    <span class="partner-name">Amadeus</span>
+    <span class="partner-name">Sabre</span>
+    <span class="partner-name">ATOL</span>
+    <span class="partner-name">ABTA</span>
+    <span class="partner-name">WTTC</span>
+    <span class="partner-name">ISO 27001</span>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <img src="orn-logo.png" alt="ORN Logo">
+      <p>ORN is a global travel corporation delivering world-class journeys through a portfolio of specialist brands, powered by the NX/OS platform.</p>
+      <p class="tagline">Orchestrated Rhythms of Nature</p>
+      <div class="social-row" style="margin-top:1.2rem">
+        <a class="social-btn" href="#">in</a>
+        <a class="social-btn" href="#">tw</a>
+        <a class="social-btn" href="#">ig</a>
+        <a class="social-btn" href="#">yt</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h5>Our Brands</h5>
+      <ul>
+        <li><a href="#">ORN Flights</a></li>
+        <li><a href="#">ORN Hotels</a></li>
+        <li><a href="#">ORN Cruise</a></li>
+        <li><a href="#">ORN Rail</a></li>
+        <li><a href="#">ORN Cars</a></li>
+        <li><a href="#">ORN Experiences</a></li>
+        <li><a href="#">NX/OS Platform</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Corporate</h5>
+      <ul>
+        <li><a href="#">About ORN</a></li>
+        <li><a href="#">Investor Relations</a></li>
+        <li><a href="#">Press &amp; Media</a></li>
+        <li><a href="#">Sustainability</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Annual Report</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Partners</h5>
+      <ul>
+        <li><a href="#">Trade Partners</a></li>
+        <li><a href="#">Corporate Clients</a></li>
+        <li><a href="#">API &amp; Technology</a></li>
+        <li><a href="#">Affiliate Programme</a></li>
+        <li><a href="#">Contact Us</a></li>
+        <li><a href="#">Partner Login</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 ORN Group Ltd. All rights reserved. Registered in England &amp; Wales.</p>
+    <div class="footer-legal">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms &amp; Conditions</a>
+      <a href="#">Cookie Settings</a>
+      <a href="#">Modern Slavery Act</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const anims = document.querySelectorAll('.anim:not(.hero-content .anim)');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+  anims.forEach((el, i) => {
+    el.style.transitionDelay = (i % 5) * 0.08 + 's';
+    observer.observe(el);
+  });
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', () => {
+    nav.style.background = window.scrollY > 60 ? 'rgba(0,0,0,0.95)' : 'rgba(0,0,0,0.8)';
+  });
+</script>
+</body>
+</html>
